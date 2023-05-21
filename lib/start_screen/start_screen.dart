@@ -1,13 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:gem_detector_simulation/gems_simulation_screen/gem_simulation_screen.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import '../ad_helper/ad_helper.dart';
 class StartScreen extends StatefulWidget {
   const StartScreen({Key? key}) : super(key: key);
 
   @override
   State<StartScreen> createState() => _StartScreenState();
 }
+const int maxFailedLoadAttempts = 3;
 
 class _StartScreenState extends State<StartScreen> {
+  InterstitialAd? _interstitialAd;
+  int _interstitialAttempts = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    generateInterstitialAd();
+
+  }
+
+  void generateInterstitialAd() {
+    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (InterstitialAd ad) {
+              _interstitialAd = ad;
+              _interstitialAttempts = 0;
+            }, onAdFailedToLoad: (LoadAdError error) {
+          _interstitialAttempts += 1;
+          _interstitialAd = null;
+          if (_interstitialAttempts >= maxFailedLoadAttempts) {
+            generateInterstitialAd();
+          }
+        }));
+  }
+
+  void showAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (InterstitialAd ad){
+            ad.dispose();
+            generateInterstitialAd();
+          }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error){
+            ad.dispose();
+            generateInterstitialAd();
+          });
+      _interstitialAd!.show();
+    }
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _interstitialAd?.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +94,7 @@ class _StartScreenState extends State<StartScreen> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
                   onPressed: () {
+                    showAd();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>GemSimulationScreen()));
                   }, child: CircleAvatar(child: Image(
                   image: AssetImage("assets/images/startbutton.png"),

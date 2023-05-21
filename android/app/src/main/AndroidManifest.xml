@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.qutech.gemdetector.gem_detector_simulation">
+    package="com.alphasofts.gemsdetectorsimulator">
    <application
-        android:label="gem_detector_simulation"
+        android:label="gemdetectorsimulator"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

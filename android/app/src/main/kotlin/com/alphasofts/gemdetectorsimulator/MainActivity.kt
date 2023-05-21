@@ -1,4 +1,4 @@
-package com.qutech.gemdetector.gem_detector_simulation
+package com.alphasofts.gemsdetectorsimulator
 
 import io.flutter.embedding.android.FlutterActivity
 
