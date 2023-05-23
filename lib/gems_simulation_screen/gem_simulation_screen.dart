@@ -127,7 +127,7 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
                             children: [
                               IconButton(
                                   onPressed: () {
-
+                                    _launchUrl();
                                   },
                                   icon: Image(
                                     fit: BoxFit.fill,
