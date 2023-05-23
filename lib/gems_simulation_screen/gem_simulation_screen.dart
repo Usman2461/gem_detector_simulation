@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gem_detector_simulation/gemstone_results_screen/gem_stone_results.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../ad_helper/ad_helper.dart';
 
@@ -71,6 +72,13 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
     await Future.delayed(Duration(seconds: 7), () {});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => GemstoneResults()));
+  }
+
+  String urlLink = "https://www.youtube.com/watch?v=bNnFacgHNfg&t=1s";
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(Uri.parse(urlLink))) {
+      throw Exception('Could not launch $urlLink');
+    }
   }
 
   @override
