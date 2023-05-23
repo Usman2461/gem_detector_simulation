@@ -5,8 +5,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../ad_helper/ad_helper.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
-// new package name
-// com.alphasofts.gemsdetectorsimulator
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -27,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>{
   }
 
   navigateToStart() async{
-    await Future.delayed(Duration(seconds: 3), (){});
+    await Future.delayed(Duration(seconds: 4), (){});
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>StartScreen()));
   }
 
@@ -36,6 +34,7 @@ class _SplashScreenState extends State<SplashScreen>{
     return Scaffold(
       bottomNavigationBar:  isBannerAdLoaded
           ? Container(
+        color: Colors.black54,
         height: _bottomBannerAd.size.height.toDouble(),
         width: _bottomBannerAd.size.width.toDouble(),
         child: AdWidget(ad: _bottomBannerAd,),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gem_detector_simulation/start_screen/start_screen.dart';
 import 'splash_screen/splash_screen.dart';
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,11 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      initialRoute: "/splash",
+      routes: {
+        "/splash": (context)=>SplashScreen(),
+        "/start" : (context)=> StartScreen(),
+      },
     );
   }
 }

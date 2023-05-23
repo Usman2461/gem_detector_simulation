@@ -3,6 +3,9 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:math';
 import 'package:gem_detector_simulation/widgets/custom_button.dart';
 import 'package:gem_detector_simulation/start_screen/start_screen.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import '../ad_helper/ad_helper.dart';
 class GemstoneResults extends StatefulWidget {
   const GemstoneResults({Key? key}) : super(key: key);
 
@@ -11,6 +14,11 @@ class GemstoneResults extends StatefulWidget {
 }
 
 class _GemstoneResultsState extends State<GemstoneResults> {
+
+  InterstitialAd? _interstitialAd;
+  int _interstitialAttempts = 0;
+  late BannerAd _bottomBannerAd;
+  bool isBannerAdLoaded = false;
 
   FlutterTts flutterTts = FlutterTts();
   final number = Random().nextDouble();
@@ -29,11 +37,73 @@ class _GemstoneResultsState extends State<GemstoneResults> {
   initState(){
     super.initState();
     _speak(number<0.5?"Gemstone is fake":"Gemstone is original");
+    generateInterstitialAd();
+    createBtmBannerAd();
+  }
+
+  void generateInterstitialAd() {
+    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId2,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (InterstitialAd ad) {
+              _interstitialAd = ad;
+              _interstitialAttempts = 0;
+            }, onAdFailedToLoad: (LoadAdError error) {
+          _interstitialAttempts += 1;
+          _interstitialAd = null;
+          if (_interstitialAttempts >= maxFailedLoadAttempts) {
+            generateInterstitialAd();
+          }
+        }));
+  }
+  void createBtmBannerAd() {
+    _bottomBannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdHelper.bannerAdUnitId6,
+        listener: BannerAdListener(onAdLoaded: (_) {
+          setState(() {
+            isBannerAdLoaded = true;
+          });
+        }, onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        }),
+        request: AdRequest());
+    _bottomBannerAd.load();
+  }
+
+  void showAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (InterstitialAd ad){
+            ad.dispose();
+            generateInterstitialAd();
+          }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error){
+            ad.dispose();
+            generateInterstitialAd();
+          });
+      _interstitialAd!.show();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _interstitialAd?.dispose();
+    _bottomBannerAd.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar:  isBannerAdLoaded
+          ? Container(
+        color: Colors.black54,
+        height: _bottomBannerAd.size.height.toDouble(),
+        width: _bottomBannerAd.size.width.toDouble(),
+        child: AdWidget(ad: _bottomBannerAd,),
+      )
+          : SizedBox(),
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -72,7 +142,8 @@ class _GemstoneResultsState extends State<GemstoneResults> {
             ),
             SizedBox(height: 10,),
             CustomButton(text: "Try Again",onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>StartScreen()));
+              showAd();
+              Navigator.popAndPushNamed(context, "/start");
             },),
           ],
         ):Column(
@@ -100,7 +171,8 @@ class _GemstoneResultsState extends State<GemstoneResults> {
             ),
             SizedBox(height: 10,),
             CustomButton(text: "Try Again",onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>StartScreen()));
+              showAd();
+              Navigator.popAndPushNamed(context, "/start");
             },),
           ],
         ),
