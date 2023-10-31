@@ -17,8 +17,7 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
   FlutterTts flutterTts = FlutterTts();
   late BannerAd _bottomBannerAd;
   bool isBannerAdLoaded = false;
-  late BannerAd _bottomBannerAd2;
-  bool isBannerAdLoaded2 = false;
+
 
   Future _speak(String _newVoiceText) async {
     await flutterTts.setVolume(0.5);
@@ -36,14 +35,13 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
     super.initState();
     _speak("Swipe your gem stone");
     createBtmBannerAd();
-    createBtmBannerAd2();
     navigateToResults();
   }
 
   void createBtmBannerAd() {
     _bottomBannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId4,
+        adUnitId: AdHelper.bannerAdUnitId,
         listener: BannerAdListener(onAdLoaded: (_) {
           setState(() {
             isBannerAdLoaded = true;
@@ -54,20 +52,7 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
         request: AdRequest());
     _bottomBannerAd.load();
   }
-  void createBtmBannerAd2() {
-    _bottomBannerAd2 = BannerAd(
-        size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId5,
-        listener: BannerAdListener(onAdLoaded: (_) {
-          setState(() {
-            isBannerAdLoaded2 = true;
-          });
-        }, onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-        }),
-        request: AdRequest());
-    _bottomBannerAd2.load();
-  }
+
   navigateToResults() async {
     await Future.delayed(Duration(seconds: 7), () {});
     Navigator.pushReplacement(
@@ -86,7 +71,6 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
     // TODO: implement dispose
     super.dispose();
     _bottomBannerAd.dispose();
-    _bottomBannerAd2.dispose();
   }
 
   @override
@@ -105,14 +89,6 @@ class _GemSimulationScreenState extends State<GemSimulationScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                isBannerAdLoaded2
-                    ? Container(
-                  color: Colors.black54,
-                  height: _bottomBannerAd.size.height.toDouble(),
-                  width: _bottomBannerAd.size.width.toDouble(),
-                  child: AdWidget(ad: _bottomBannerAd2,),
-                )
-                    : SizedBox(),
                 SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,

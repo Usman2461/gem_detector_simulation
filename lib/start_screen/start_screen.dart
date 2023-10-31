@@ -16,8 +16,7 @@ class _StartScreenState extends State<StartScreen> {
   int _interstitialAttempts = 0;
   late BannerAd _bottomBannerAd;
   bool isBannerAdLoaded = false;
-  late BannerAd _bottomBannerAd2;
-  bool isBannerAdLoaded2 = false;
+
 
   @override
   void initState() {
@@ -25,7 +24,6 @@ class _StartScreenState extends State<StartScreen> {
     super.initState();
     generateInterstitialAd();
     createBtmBannerAd();
-    createBtmBannerAd2();
 
   }
 
@@ -47,7 +45,7 @@ class _StartScreenState extends State<StartScreen> {
   void createBtmBannerAd() {
     _bottomBannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId2,
+        adUnitId: AdHelper.bannerAdUnitId,
         listener: BannerAdListener(onAdLoaded: (_) {
           setState(() {
             isBannerAdLoaded = true;
@@ -58,20 +56,7 @@ class _StartScreenState extends State<StartScreen> {
         request: AdRequest());
     _bottomBannerAd.load();
   }
-  void createBtmBannerAd2() {
-    _bottomBannerAd2 = BannerAd(
-        size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId3,
-        listener: BannerAdListener(onAdLoaded: (_) {
-          setState(() {
-            isBannerAdLoaded2 = true;
-          });
-        }, onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-        }),
-        request: AdRequest());
-    _bottomBannerAd2.load();
-  }
+
 
   void showAd() {
     if (_interstitialAd != null) {
@@ -94,7 +79,6 @@ class _StartScreenState extends State<StartScreen> {
     super.dispose();
     _interstitialAd?.dispose();
     _bottomBannerAd.dispose();
-    _bottomBannerAd2.dispose();
   }
 
   @override
@@ -113,14 +97,6 @@ class _StartScreenState extends State<StartScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              isBannerAdLoaded2
-                  ? Container(
-                color: Colors.black54,
-                height: _bottomBannerAd.size.height.toDouble(),
-                width: _bottomBannerAd.size.width.toDouble(),
-                child: AdWidget(ad: _bottomBannerAd2,),
-              )
-                  : SizedBox(),
               Stack(
                 alignment: AlignmentDirectional.center,
                 children: [

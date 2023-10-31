@@ -42,7 +42,7 @@ class _GemstoneResultsState extends State<GemstoneResults> {
   }
 
   void generateInterstitialAd() {
-    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId2,
+    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
             onAdLoaded: (InterstitialAd ad) {
@@ -59,7 +59,7 @@ class _GemstoneResultsState extends State<GemstoneResults> {
   void createBtmBannerAd() {
     _bottomBannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId6,
+        adUnitId: AdHelper.bannerAdUnitId,
         listener: BannerAdListener(onAdLoaded: (_) {
           setState(() {
             isBannerAdLoaded = true;
