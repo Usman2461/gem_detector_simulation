@@ -3,7 +3,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gem_detector_simulation/gemstone_results_screen/gem_stone_results.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../ad_helper/ad_helper.dart';
 
 class GemSimulationScreen extends StatefulWidget {

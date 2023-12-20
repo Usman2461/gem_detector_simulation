@@ -15,7 +15,6 @@ class _SplashScreenState extends State<SplashScreen>{
   @override
   void initState(){
   super.initState();
-  createBtmBannerAd();
   navigateToStart();
   }
   void dispose() {
@@ -32,14 +31,6 @@ class _SplashScreenState extends State<SplashScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar:  isBannerAdLoaded
-          ? Container(
-        color: Colors.black54,
-        height: _bottomBannerAd.size.height.toDouble(),
-        width: _bottomBannerAd.size.width.toDouble(),
-        child: AdWidget(ad: _bottomBannerAd,),
-      )
-          : SizedBox(),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -63,18 +54,4 @@ class _SplashScreenState extends State<SplashScreen>{
     );
   }
 
-  void createBtmBannerAd() {
-    _bottomBannerAd = BannerAd(
-        size: AdSize.banner,
-        adUnitId: AdHelper.bannerAdUnitId,
-        listener: BannerAdListener(onAdLoaded: (_) {
-          setState(() {
-            isBannerAdLoaded = true;
-          });
-        }, onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-        }),
-        request: AdRequest());
-    _bottomBannerAd.load();
-  }
 }

@@ -3,6 +3,8 @@ import 'package:gem_detector_simulation/gems_simulation_screen/gem_simulation_sc
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../ad_helper/ad_helper.dart';
+import '../privacy_policy/privacy_policy_page.dart';
+import '../tuning_screen/fine_tune_settingss.dart';
 class StartScreen extends StatefulWidget {
   const StartScreen({Key? key}) : super(key: key);
 
@@ -138,7 +140,15 @@ class _StartScreenState extends State<StartScreen> {
                             fontSize: 18,
                             color: Colors.red,
                             fontWeight: FontWeight.bold),
-                      )
+                      ),
+                      SizedBox(height: 10.0,),
+                      ElevatedButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>FineTuneScreen()));
+                      }, child: Text("Fine Tune Settings", style: TextStyle(fontWeight: FontWeight.bold),)),
+                      SizedBox(height: 10.0,),
+                      ElevatedButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PrivacyPolicyPage()));
+                      }, child: Text("Privacy Policy", style: TextStyle(fontWeight: FontWeight.bold),))
                     ],
                   )
                 ],
